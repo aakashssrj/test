@@ -1,0 +1,25 @@
+JWT Token(Json Web Token)
+
+
+Instance--> it uses interceptors (where each api more or less works as middleware)
+        -->any api comes from backend it will modify through interceptors
+        -->It handles the api dynamically
+
+        syntax::
+
+        CONFIG.HEADER.AUTHORIZATION
+
+        -->It is optimized as per it works over http 
+        -->BEAR TOKEN --> if not use it throws error (401) unauthorized.
+
+        Midddleware --> api se pehle chalne wali (just like :- security)
+                    --> router.post('/login', middleware , LOGIN)
+                                                    |_>
+                                                        1.req. API
+                                                        2.JWT.VERIFY(TOKEN , S.Key)
+                                                        3.Errors Handling (if-else conditions)
+                                                        4.response ()
+
+
+-header me token bhejtey h
+-
