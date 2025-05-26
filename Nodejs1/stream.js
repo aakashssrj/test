@@ -1,5 +1,7 @@
 const http = require('http')
 const fs = require('fs')
+const {Transform} = require('stream')
+
 
 
 const server = http.createServer((req,res)=>{
@@ -23,14 +25,36 @@ const server = http.createServer((req,res)=>{
 
 
 // * Copy File in a Good Way using (STREAM)
-    const readableStream = fs.createReadStream('sample.txt')
-    const writeableStream = fs.createWriteStream('output1.txt')
+    // const readableStream = fs.createReadStream('sample.txt')
+    // const writeableStream = fs.createWriteStream('output1.txt')
 
-    readableStream.on("data", (chunks)=>{
-        console.log("CHUNKS:  ",chunks)
-        writeableStream.write(chunks)
-        res.end()
-    })
+    // readableStream.on("data", (chunks)=>{
+    //     console.log("CHUNKS:  ",chunks)
+    //     writeableStream.write(chunks)
+    
+    // })
+
+    // readableStream.on("end" , ()=>{
+    //     console.log("Reading Done.....")
+    //     writeableStream.end()
+    // })
+
+//* ----------------------------------Just using Tranform for string Processing-----------------
+    // const readableStream = fs.createReadStream("sample.txt")
+    // const writeableStream = fs.createWriteStream("Tranformed.txt")
+
+    // const transformStream  = new Transform({
+    //     transform(chunk , encoding , callback){
+    //         const modifiecdata = chunk.toString().toUpperCase().replaceAll(/ipsum/gi , "Aakash")
+    //         callback(null , modifiecdata)
+    //     }
+    // })
+
+
+    // readableStream.pipe(transformStream).pipe(writeableStream)
+
+    // res.end()
+
 })
 
 server.listen(8080,()=>{
