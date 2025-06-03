@@ -1,13 +1,17 @@
-import exprerss from "express";
+import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import session from "express-session";
 
 // Import Local modules
 import userRoutes from "./routes/user.routes.js";
+import taskRoutes from "./routes/task.routes.js"; 
 import connectDB from "./config/db.config.js";
 
-const app = exprerss();
+const app = express();
 dotenv.config();
+
+
 
 const PORT = 3000;
 
@@ -23,13 +27,22 @@ app.use(
     },
   })
 );
-app.use(exprerss.json());
+
+app.use(cors({
+  origin: "http://localhost:3000", // frontend origin
+  credentials: true
+}));
+
+
+app.use(express.json());
 
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 //UserRoutes
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/user/task", taskRoutes);
+
 
 
 // Start the server and connect to MongoDB
