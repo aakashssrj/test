@@ -5,8 +5,10 @@ import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
 import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { userAuthStore } from "../store/userAuthStore";
 
 const LoginPage = () => {
+  const {login} = userAuthStore()
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -27,14 +29,13 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3000/api/auth/login' , formData)
-      console.log(response)
-      toast.success("Successfully Loggeed In")
-    } catch (error) {
-      console.log(error)
-      toast.error("Something Went Wrong ")
+
+    const success = validateForm()
+    
+    if(success){
+      login(formData)
     }
+  
   };
 
   return (
@@ -112,7 +113,7 @@ const LoginPage = () => {
 
           <div className="text-center">
             <p className="text-base-content/60">
-              Don&apos;t have an account?{" "}
+              Dont have an account?{" "}
               <Link to="/signup" className="link link-primary">
                 Create account
               </Link>

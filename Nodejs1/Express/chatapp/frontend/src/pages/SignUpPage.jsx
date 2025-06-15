@@ -6,8 +6,11 @@ import axios from 'axios'
 import { Eye, EyeOff, Link, Loader2, Lock, Mail, MessageSquare, User } from "lucide-react";
 import toast from "react-hot-toast";
 import AuthImagePattern from '../components/AuthImagePattern';
+import { userAuthStore } from '../store/userAuthStore';
 
 const SignUpPage = () => {
+
+  const {signup} = userAuthStore()
 
   const [formData,setFormData] = useState({
     name:"",
@@ -29,31 +32,13 @@ const SignUpPage = () => {
   
   const handleSubmit = async(e)=>{
     e.preventDefault();
-    try {
-      const isValid =  validateForm();
-      if(!isValid) return ;
+    const success = validateForm()
 
-      const response = await axios.post('http://localhost:3000/api/auth/signup' , formData) 
-      console.log(response)
-      toast.success("Account Created Successfully")
-      
-    } catch (error) {
-      console.log(error)
-      toast.error("Something Went Wrong")
+    if(success){
+      signup(formData)
     }
-    
-    console.log(formData)
+
   }
-
-
-
-
-
-
-
-
-
-
 
 
   return (

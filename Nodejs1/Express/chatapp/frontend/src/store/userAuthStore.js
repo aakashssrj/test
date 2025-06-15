@@ -1,20 +1,19 @@
 import { create } from "zustand"; //Jo Global Variable ko set krega throughtout frontend
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
-const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3000" : "/";
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3000/" : "/";
 
-export const useAuthStore = create((set, get) => ({
-  authUser: null,
+export const userAuthStore = create((set, get) =>({
+  authUser: null, 
   isSigningUp: false,
   isLoggingIn: false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
 
 
-  checkAuth: async () => {
+  checkAuth: async() => {
     try {
       const res = await axiosInstance.get("/auth/check");
-
       set({ authUser: res.data });
 
     } catch (error) {
@@ -26,7 +25,7 @@ export const useAuthStore = create((set, get) => ({
   },
 
   signup: async (data) => {
-    set({ isSigningUp: true });
+    set({ isSigningUp: true }); //Start Loading
     try {
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
@@ -35,12 +34,12 @@ export const useAuthStore = create((set, get) => ({
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      set({ isSigningUp: false });
+      set({ isSigningUp: false }); //Ends Loading
     }
   },
 
   login: async (data) => {
-    set({ isLoggingIn: true });
+    set({ isLoggingIn: true }); //Start Loading
     try {
       const res = await axiosInstance.post("/auth/login", data);
       set({ authUser: res.data });
@@ -49,7 +48,7 @@ export const useAuthStore = create((set, get) => ({
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      set({ isLoggingIn: false });
+      set({ isLoggingIn: false }); //Ends Loading
     }
   },
 
@@ -64,7 +63,7 @@ export const useAuthStore = create((set, get) => ({
   },
 
   updateProfile: async (data) => {
-    set({ isUpdatingProfile: true });
+    set({ isUpdatingProfile: true }); //Start Loading
     try {
       const res = await axiosInstance.put("/auth/update-profile", data);
       set({ authUser: res.data });
@@ -73,7 +72,7 @@ export const useAuthStore = create((set, get) => ({
       console.log("error in update profile:", error);
       toast.error(error.response.data.message);
     } finally {
-      set({ isUpdatingProfile: false });
+      set({ isUpdatingProfile: false }); //Ends Loading
     }
   }
 

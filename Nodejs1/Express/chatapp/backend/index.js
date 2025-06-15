@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/auth" , authRouter)
-app.use('/api/message' , messageRouter)
+app.use("/api/message", messageRouter)
 
 
 dotenv.config();
