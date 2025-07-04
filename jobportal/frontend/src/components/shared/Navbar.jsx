@@ -23,7 +23,7 @@ const Navbar = () => {
             <li>Browsers</li>
           </ul>
 
-          {!user ? (
+          { !user ? (
             <div className="flex items-center gap-2">
               <Link to='/login'><Button variant='outline'>Login</Button></Link>
               <Link to='/signup'><Button variant='outline' className='bg-[#b3a3d4] hover:bg-[#6A38C2]'>Signup</Button></Link>
@@ -62,6 +62,7 @@ const Navbar = () => {
               </PopoverContent>
             </Popover>
           )}
+          
         </div>
       </div>
     </div>

@@ -13,7 +13,10 @@ dotenv.config()
 
 
 const app = express()
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  credentials: true
+}));
 app.use(express.json())
 app.use(express.urlencoded({ extended: false}))
 app.use(cookieParser());
@@ -32,14 +35,6 @@ app.use('/api/v1/user',userRoute)
 app.use('/api/v1/company', companyRoute)
 app.use('/api/v1/job',jobRoute)
 app.use('/api/v1/appilication',applicationRoute)
-
-
-
-
-
-
-
-
 
 
 

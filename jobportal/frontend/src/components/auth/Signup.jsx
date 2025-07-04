@@ -5,9 +5,14 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Button } from "../ui/button.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { USER_API } from "@/utils/constants";
+
+import { toast } from "sonner";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [input, setInput] = useState({
     fullname: "",
     email: "",
@@ -21,22 +26,48 @@ const Signup = () => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  const changeFileHanler = (e) => {
+  const changeFileHandler = (e) => {
     setInput({ ...input, file: e.target.files?.[0] });
   };
 
-  const SubmitHandler = async (e) =>{
+  const SubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(input)
-  }
+
+    const formData = new FormData();
+    formData.append("fullname", input.fullname);
+    formData.append("email", input.email);
+    formData.append("phoneNumber", input.phoneNumber);
+    formData.append("password", input.password);
+    formData.append("role", input.role);
+    if (input.file) {
+      formData.append("file", input.file);
+    }
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+    try {
+      const res = await axios.post(`${USER_API}/register`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        console.log(res.data);
+        navigate("/login");
+        toast.success(res?.data?.message || " Successfully Created");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.res?.data?.message || "Something went Wrong");
+    }
+  };
 
   return (
     <div>
       <Navbar />
-      <div
-        className="flex items-center justify-center
-      "
-      >
+      <div className="flex items-center justify-center">
         <form
           onSubmit={SubmitHandler}
           className="w-1/2 border border-gray-200 rounded-md p-4 my-10"
@@ -112,7 +143,12 @@ const Signup = () => {
 
             <div className="flex items-center gap-2">
               <Label>Profile</Label>
-              <Input accept="image/*" onChange={changeFileHanler} type="file" className="cursor-pointer" />
+              <Input
+                accept="image/*"
+                onChange={changeFileHandler}
+                type="file"
+                className="cursor-pointer"
+              />
             </div>
           </div>
           <Button type="submit" className="w-full my-4 bg-[#6A38C2]">
