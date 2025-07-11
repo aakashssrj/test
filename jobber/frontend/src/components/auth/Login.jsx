@@ -9,9 +9,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { USER_API } from "@/utils/constants";
 import { toast } from "sonner";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/redux/authSlice";
+import { Loader2 } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading } = useSelector((store) => store.auth || { loading: false });
   const [input, setInput] = useState({
     email: "",
 
@@ -26,14 +31,17 @@ const Login = () => {
   const SubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${USER_API}/login`,
-      input,
-      {
-        headers: {
-          "Content-type": "application/json",
-        },
-        withCredentials: true,
-      });
+      dispatch(setLoading(true));
+      const res = await axios.post(
+        `${USER_API}/login`,
+        input,
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
       if (res.data.success) {
         navigate("/");
         toast.success(res.data.message);
@@ -41,6 +49,8 @@ const Login = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.res.data.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -105,9 +115,21 @@ const Login = () => {
               </div>
             </RadioGroup>
           </div>
-          <Button type="submit" className="w-full my-4 bg-[#6A38C2]">
-            Login
-          </Button>
+          {loading ? (
+            <Button
+            className="mr-2 h-4 w-4 "
+            >
+              {" "}
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait{" "}
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="w-full my-4 bg-[#6A38C2]"
+            >
+              Login
+            </Button>
+          )}
           <span className="text-sm">
             Create an Account?
             <Link to="/signup" className="text-blue-500">
